@@ -1,0 +1,20 @@
+{
+  "name": "nodestuff",
+  "version": "1.0.0",
+  "description": "This is the data selfie app by JL and TCT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example",
+    "learning",
+    "selfie",
+    "review"
+  ],
+  "author": "Andrei",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
