@@ -6,4 +6,5 @@ Feel free to check my code. I am working on this mini app to test and explore ch
 
 I added basic node.js functionality to serve multiple static files - July 29, 2020.
 
-Added "develop" branch as development environment - August 1, 2020.
+Use NeDB as database for this mini app, initial functionalities are get and post - August 1, 2020. 
+Added "develop" branch for development environment - August 1, 2020.
