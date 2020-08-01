@@ -32,46 +32,49 @@
   <div id="geolocMap"></div>
 
   <script>
-    document.getElementById('locateMe').addEventListener('click', event => {
+    let lat, long;
+
     // for geolocation
     if('geolocation' in navigator) {
       console.log('geolocation available');
       navigator.geolocation.getCurrentPosition(async position => {
         // console.log(position);
-        const lat = position.coords.latitude;
-        const long = position.coords.longitude;
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
         const data = { lat, long };
   
         document.getElementById('latitude').textContent = lat;
         document.getElementById('longitude').textContent = long;
         
         await postLongLat(data);
-
-        // making a map and tiles
-        const myMap = L.map('geolocMap').setView([lat, long], 15); //setview focus the map based on long lat
-      
-        const mapper = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(myMap);
-
-        // make the marker
-        const locIcon = L.icon({
-          iconUrl: 'pngwave.png',
-          iconSize: [50, 32],
-          iconAnchor: [25, 16]
-        });
-
-        const marker = L.marker([lat, long], {icon: locIcon}).addTo(myMap);
-        //set marker longlat
-        // marker.setLatLng([lat, long]);
       });
     } else {
       console.log('geolocation not avalable');
     }
+
+    document.getElementById('locateMe').addEventListener('click', event => {
+      // making a map and tiles
+      const myMap = L.map('geolocMap').setView([lat, long], 15); //setview focus the map based on long lat
+      
+      const mapper = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(myMap);
+
+      // make the marker
+      const locIcon = L.icon({
+        iconUrl: 'pngwave.png',
+        iconSize: [50, 32],
+        iconAnchor: [25, 16]
+      });
+
+      const marker = L.marker([lat, long], {icon: locIcon}).addTo(myMap);
+      //set marker longlat
+      // marker.setLatLng([lat, long]);
     });
 
-    document.getElementById('addToArray').addEventListener('click', async data => {
-      await postLongLat()
+    document.getElementById('addToArray').addEventListener('click', async event => {
+      const addData = { long, lat }
+      await postLongLat(addData);
     });
 
     async function postLongLat(data) {
@@ -84,10 +87,9 @@
       };
 
       const response = await fetch('/api', options);
-      console.log(response.json());
-      // return response.json();
+      const jsonData = await response.json();
+      console.log(jsonData);
     }
-    
   </script>
 
   <p>Hello Page!</p>
