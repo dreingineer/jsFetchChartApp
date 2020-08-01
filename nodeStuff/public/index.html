@@ -20,22 +20,23 @@
   <h1>Data Selfie App</h1>
   <h2>Develop Branch</h2>
 
-  <a href="/">Hello</a> | <a href="/goodbye.html">Goodbye</a>
+  <a href="/">Hello</a> | <a href="/all.html">Get All Data</a>| <a href="/goodbye.html">Goodbye</a>
 
   <p>
     latitude: <span id="latitude"></span>&deg;<br>
     longitude: <span id="longitude"></span>&deg;
   </p>
 
+  <label for="randomText">Your Random thought?</label>
+  <input type="text" name="" id="randomText"><br>
   <button id="locateMe">Locate Me</button>
-  <button id="addToArray">Add data to Array</button>
+  <button id="addToArray">Add to Database</button>
   <br><br>
   <div id="geolocMap"></div>
 
   <script>
     let lat, long;
 
-    // for geolocation
     if('geolocation' in navigator) {
       console.log('geolocation available');
       navigator.geolocation.getCurrentPosition(async position => {
@@ -47,21 +48,19 @@
         document.getElementById('latitude').textContent = lat;
         document.getElementById('longitude').textContent = long;
         
-        await postLongLat(data);
+        // await postLongLat(data);
       });
     } else {
       console.log('geolocation not avalable');
     }
-
+    
     document.getElementById('locateMe').addEventListener('click', event => {
-      // making a map and tiles
       const myMap = L.map('geolocMap').setView([lat, long], 15); //setview focus the map based on long lat
       
       const mapper = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(myMap);
 
-      // make the marker
       const locIcon = L.icon({
         iconUrl: 'pngwave.png',
         iconSize: [50, 32],
@@ -69,13 +68,14 @@
       });
 
       const marker = L.marker([lat, long], {icon: locIcon}).addTo(myMap);
-      //set marker longlat
-      // marker.setLatLng([lat, long]);
     });
 
-    document.getElementById('addToArray').addEventListener('click', async event => {
-      const addData = { long, lat }
+    const button = document.getElementById('addToArray');
+    button.addEventListener('click', async event => {
+      const randomText = document.getElementById('randomText').value;
+      const addData = { long, lat, randomText };
       await postLongLat(addData);
+      document.getElementById('randomText').value = "";
     });
 
     async function postLongLat(data) {
@@ -91,6 +91,7 @@
       const jsonData = await response.json();
       console.log(jsonData);
     }
+    
   </script>
 
   <p>Hello Page!</p>
