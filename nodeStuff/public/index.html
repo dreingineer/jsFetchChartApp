@@ -49,6 +49,12 @@
         document.getElementById('longitude').textContent = long;
         
         // await postLongLat(data);
+      }, function error(msg) {
+        alert('Please enable your GPS postion feature');
+      }, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 10000
       });
     } else {
       console.log('geolocation not avalable');
