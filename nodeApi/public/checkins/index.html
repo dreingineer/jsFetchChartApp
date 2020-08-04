@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Checkins</title>
+</head>
+<body>
+  <h1>Weather Checkins</h1>
+  <a href="/">check in</a> | <a href="/checkins">view checkins</a>
+  <br>
+
+  <script>
+    getCheckins();
+
+    async function getCheckins() {
+      const res = await fetch('/api/checkin');
+      const checkins = await res.json();
+      console.log('from db', checkins); // display in console data from db thru server
+
+      for(item of checkins) {
+        const root = document.createElement('p');
+        const location = document.createElement('div');
+        const date = document.createElement('div');
+        const temperature = document.createElement('div');
+        const sunrise = document.createElement('div');
+        const sunset = document.createElement('div');
+        const windspeed = document.createElement('div');
+
+        location.textContent = `${item.long}° , ${item.lat}°`;
+        date.textContent = `${item.timestamp}`;
+        temperature.textContent = `${item.temperature} C°`;
+        sunrise.textContent = `${item.sunrise}`;
+        sunset.textContent = `${item.sunset}`;
+        windspeed.textContent = `${item.windspeed} Kph`;
+
+        root.append(location, date, temperature, sunrise, sunset, windspeed);
+        document.body.append(root);
+      }
+
+    }
+  </script>
+</body>
+</html>
