@@ -9,3 +9,5 @@ I added basic node.js functionality to serve multiple static files - July 29, 20
 Use NeDB as database for this mini app, initial functionalities are get and post - August 1, 2020.
 
 Added "develop" branch for development environment - August 1, 2020.
+
+Updated commits and branches are merged to develop. Implemented calls to external API are via NodeJS node_fetch. NodeJS routes are consumed in the client side using fetch function. Methods implemented (client side) are GET and POST, posted data are saved using nedb. - August 4, 2020.
