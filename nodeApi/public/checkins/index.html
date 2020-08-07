@@ -4,39 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather Checkins</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin="anonymous"></script>
+  <style>
+    p {
+      padding: 10px;
+      background-color: #ffddff;
+    }
+
+    #checkinMap {
+      height: 240px;
+    }
+  </style>
 </head>
 <body>
   <h1>Weather Checkins</h1>
-  <a href="/">check in</a> | <a href="/checkins">view checkins</a>
+  <div>
+    <a href="/">check in</a> | <a href="/checkins">view checkins</a>
+  </div>
   <br>
+  <div id="checkinMap"></div>
 
   <script>
+    const mymap = L.map('checkinMap').setView([0, 0], 1);
+    const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    const titleUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    const tiles = L.tileLayer( titleUrl, { attribution });
+    tiles.addTo(mymap);
+
     getCheckins();
 
     async function getCheckins() {
-      const res = await fetch('/api/checkin');
+      const res = await fetch('/api/checkin', {mode: 'cors'});
       const checkins = await res.json();
       console.log('from db', checkins); // display in console data from db thru server
 
       for(item of checkins) {
-        const root = document.createElement('p');
-        const location = document.createElement('div');
-        const date = document.createElement('div');
-        const temperature = document.createElement('div');
-        const sunrise = document.createElement('div');
-        const sunset = document.createElement('div');
-        const windspeed = document.createElement('div');
-
-        location.textContent = `${item.long}° , ${item.lat}°`;
-        date.textContent = `${item.timestamp}`;
-        temperature.textContent = `${item.temperature} C°`;
-        sunrise.textContent = `${item.sunrise}`;
-        sunset.textContent = `${item.sunset}`;
-        windspeed.textContent = `${item.windspeed} Kph`;
-
-        root.append(location, date, temperature, sunrise, sunset, windspeed);
-        document.body.append(root);
+        L.market([item.lat, item.long]).addTo(mymap);
       }
+      // for(item of checkins) {
+      //   const root = document.createElement('p');
+      //   const location = document.createElement('div');
+      //   const date = document.createElement('div');
+      //   const temperature = document.createElement('div');
+      //   const sunrise = document.createElement('div');
+      //   const sunset = document.createElement('div');
+      //   const windspeed = document.createElement('div');
+      //   const particulateMatter = document.createElement('div');
+      //   const value = document.createElement('div');
+      //   // const unit = document.createElement('div');
+      //   const lastRead = document.createElement('div');
+
+
+      //   location.textContent = `${item.long}° , ${item.lat}°`;
+      //   date.textContent = `${item.timestamp}`;
+      //   temperature.textContent = `${item.temperature} C°`;
+      //   sunrise.textContent = `${item.sunrise}`;
+      //   sunset.textContent = `${item.sunset}`;
+      //   windspeed.textContent = `${item.windspeed} Kph`;
+      //   particulateMatter.textContent = `Particulate Matter: ${item.particulateMatter}`;
+      //   value.textContent = `Value: ${item.value} ${item.unit}`;
+      //   // unit.textContent = `${item.unit}`;
+      //   lastRead.textContent = `Last Read: ${item.lastRead}`;
+
+      //   root.append(location, date, temperature, sunrise, sunset, windspeed, particulateMatter, value, lastRead);
+      //   document.body.append(root);
+      // }
 
     }
   </script>

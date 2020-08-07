@@ -13,6 +13,7 @@ app.use(express.json({ limit: '1mb'})); // understand incoming json with limit
 const database = new Datastore('databaseCheckin.db');
 database.loadDatabase();
 
+
 app.get('/api/checkin', (request, response) => {
   console.log('GET request');
   database.find({}, (err, data) => { // find data from db, result is in data
