@@ -4,28 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Weather Here</title>
+  <style>
+    p {
+      background-color: pink;
+    }
+  </style>
 </head>
 <body>
   <h1>The Weather Here</h1>
   <a href="/">check in</a> | <a href="/checkins">view checkins</a>
 
   <p>
-    <span id="latitude"></span>°, <span id="longitude"></span>°
+    The weather here at <span id="latitude"></span>°,
+    <span id="longitude"></span>° is <span id="summary"></span> with a temperature of <span id="temperature"></span>&deg; C.
+    The concentration of particulate matter <span id="particulateMatter"></span> is <span id="value"></span> <span id="unit"></span>,
+    last read on <span id="lastRead"></span>
   </p>
   <div>
     <h3>Weather Details</h3>
-    <p>
-      Temperature: <span id="temperature"></span> C
-    </p>
-    <p>
-      Sunrise: <span id="sunrise"></span>
-    </p>
-    <p>
-      Sunset: <span id="sunset"></span>
-    </p>
-    <p>
-      Windspeed: <span id="windspeed"></span> kph
-    </p>
+      Temperature: <span id="temperature"></span> C <br>
+      Sunrise: <span id="sunrise"></span><br>
+      Sunset: <span id="sunset"></span><br>
+      Windspeed: <span id="windspeed"></span> kph <br>
   </div>
 
   <button id="checkin">check in</button>

@@ -1,27 +1,46 @@
-let lat, long, temperature, sunrise, sunset, windspeed;
+let lat, long, temperature, sunrise, sunset, summary, windspeed, particulateMatter, value, unit, lastRead;
 
 if('geolocation' in navigator) {
   console.log('geolocation available');
   navigator.geolocation.getCurrentPosition(async position => {
-    console.log(position)
-    lat = position.coords.latitude;
-    long = position.coords.longitude;
 
-    const response = await fetch(`/api/weather/${lat},${long}`);
-    const responseJson = await response.json();
-    console.log('Weather API: ', responseJson[0]);
-    temperature = responseJson[0].temp.value;
-    sunrise = responseJson[0].sunrise.value;
-    sunset = responseJson[0].sunset.value;
-    windspeed = responseJson[0].wind_speed.value;
-
-    document.getElementById('latitude').textContent = lat.toFixed(2);
-    document.getElementById('longitude').textContent = long.toFixed(2);
-    document.getElementById('temperature').textContent = temperature;
-    document.getElementById('sunrise').textContent = sunrise;
-    document.getElementById('sunset').textContent = sunset;
-    document.getElementById('windspeed').textContent = windspeed;
-    
+    try {
+      console.log(position)
+      lat = position.coords.latitude;
+      long = position.coords.longitude;
+  
+      const response = await fetch(`/api/weather/${lat},${long}`);
+      const responseJson = await response.json();
+      console.log(responseJson);
+  
+      const weather = responseJson.weather[0];
+      const air_quality = responseJson.air_quality;
+      temperature = weather.temp.value;
+      sunrise = weather.sunrise.value;
+      sunset = weather.sunset.value;
+      summary = weather.weather_code.value;
+      windspeed = weather.wind_speed.value;
+      particulateMatter = air_quality.results[0].measurements[0].parameter;
+      value = air_quality.results[0].measurements[0].value;
+      unit = air_quality.results[0].measurements[0].unit;
+      lastRead = air_quality.results[0].measurements[0].lastUpdated;
+  
+      document.getElementById('latitude').textContent = lat.toFixed(2);
+      document.getElementById('longitude').textContent = long.toFixed(2);
+      document.getElementById('temperature').textContent = temperature;
+      document.getElementById('sunrise').textContent = sunrise;
+      document.getElementById('sunset').textContent = sunset;
+      document.getElementById('summary').textContent = summary;
+      document.getElementById('windspeed').textContent = windspeed;
+      document.getElementById('particulateMatter').textContent = particulateMatter;
+      document.getElementById('value').textContent = value;
+      document.getElementById('unit').textContent = unit;
+      document.getElementById('lastRead').textContent = lastRead;
+    } catch(error) {
+      console.error(error);
+      console.log('something went wrong');
+      document.getElementById('particulateMatter').textContent = 'NO READING';
+    }
   }, function error(msg) {
     alert('Please enable your GPS feature');
   },{

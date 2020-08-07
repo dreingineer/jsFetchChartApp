@@ -39,11 +39,22 @@ app.get('/api/weather/:latlong', async (request, response) => {
   console.log(latlong);
   const lat = latlong[0];
   const long = latlong[1];
+  
+  //wheather api
   const api_key = 'EZ4KKdhEMSvs6Ukd7q4rpnDevByvdYVl';
-  const api_url = `https://api.climacell.co/v3/weather/nowcast?lat=${lat}&lon=${long}&timestep=5&unit_system=si&fields=precipitation%3Ain%2Fhr,temp%3AC,feels_like%3AC,dewpoint%3AC,wind_speed%3Akph,wind_gust%3Akph,baro_pressure%3AmmHg,visibility%3Akm,humidity%3A%25,wind_direction%3Adegrees,sunrise,sunset&start_time=now&apikey=${api_key}`;
-  // hardcoded
-  // const api_url = `https://api.climacell.co/v3/weather/nowcast?lat=14.10&lon=121.08&timestep=5&unit_system=si&fields=precipitation%3Ain%2Fhr,temp%3AC,feels_like%3AC,dewpoint%3AC,wind_speed%3Akph,wind_gust%3Akph,baro_pressure%3AmmHg,visibility%3Akm,humidity%3A%25,wind_direction%3Adegrees,sunrise,sunset&start_time=now&apikey=EZ4KKdhEMSvs6Ukd7q4rpnDevByvdYVl`;
-  const fetchResponse = await fetch(api_url);
-  const responseJson = await fetchResponse.json();
-  response.json(responseJson);
+  const weather_api_url = `https://api.climacell.co/v3/weather/nowcast?lat=${lat}&lon=${long}&timestep=5&unit_system=si&fields=precipitation_type,temp%3AC,feels_like%3AC,dewpoint%3AC,wind_speed%3Akph,wind_gust%3Akph,baro_pressure%3AmmHg,visibility%3Akm,humidity%3A%25,wind_direction%3Adegrees,sunrise,sunset,cloud_cover%3A%25,cloud_ceiling%3Aft,cloud_base%3Aft,weather_code&start_time=now&apikey=${api_key}`;
+  const weatheFetchResponse = await fetch(weather_api_url);
+  const weatherResponseJson = await weatheFetchResponse.json();
+  
+  // open air quality api
+  const aq_api_url = `https://api.openaq.org/v1/latest?coordinates=${lat},${long}`;
+  const aqFetchResponse = await fetch(aq_api_url);
+  const aqResponseJson = await aqFetchResponse.json();
+
+  const responses = {
+    weather: weatherResponseJson,
+    air_quality: aqResponseJson
+  };
+
+  response.json(responses);
 });
