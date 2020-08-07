@@ -40,6 +40,9 @@ if('geolocation' in navigator) {
       console.error(error);
       console.log('something went wrong');
       document.getElementById('particulateMatter').textContent = 'NO READING';
+      document.getElementById('value').textContent = 'NO VALUE';
+      document.getElementById('unit').textContent = '';
+      document.getElementById('lastRead').textContent = 'NO READING';
     }
   }, function error(msg) {
     alert('Please enable your GPS feature');
