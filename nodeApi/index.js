@@ -1,6 +1,7 @@
 const express = require('express');
 const Datastore = require('nedb');
 const fetch = require('node-fetch');
+const cors = require('cors');
 const app = express();
 
 app.listen(3001, () => {
@@ -9,12 +10,13 @@ app.listen(3001, () => {
 
 app.use(express.static('public')); // serve static file inside public
 app.use(express.json({ limit: '1mb'})); // understand incoming json with limit
+app.use(cors());
 
 const database = new Datastore('databaseCheckin.db');
 database.loadDatabase();
 
 
-app.get('/api/checkin', (request, response) => {
+app.get('/api/checkin', cors(), (request, response) => {
   console.log('GET request');
   database.find({}, (err, data) => { // find data from db, result is in data
     if(err) {
@@ -25,7 +27,7 @@ app.get('/api/checkin', (request, response) => {
   });
 });
 
-app.post('/api/checkin', (request, response) => {
+app.post('/api/checkin', cors(), (request, response) => {
   console.log('POSTed a request');
   const data = request.body;
   const timestamp = new Date(Date.now());
@@ -34,7 +36,7 @@ app.post('/api/checkin', (request, response) => {
   response.json(data);
 });
 
-app.get('/api/weather/:latlong', async (request, response) => {
+app.get('/api/weather/:latlong', cors(),  async (request, response) => {
   console.log(request.params);
   const latlong = request.params.latlong.split(',');
   console.log(latlong);

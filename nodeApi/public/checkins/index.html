@@ -40,8 +40,20 @@
       console.log('from db', checkins); // display in console data from db thru server
 
       for(item of checkins) {
-        L.market([item.lat, item.long]).addTo(mymap);
-      }
+        const marker = L.marker([item.lat, item.long]).addTo(mymap);
+
+        let txt = `The weather here at ${item.lat}°,
+        ${item.long}° is ${item.summary} with a temperature of ${item.temperature}&deg; C.`;
+
+        if(item.value < 0) {
+          txt += `No air quality reading.`;
+        } else {
+          txt += `The concentration of particulate matter ${item.particulateMatter} is ${item.value} ${item.unit},
+        last read on ${item.lastRead}`;
+        };
+
+        marker.bindPopup(txt);
+      };
       // for(item of checkins) {
       //   const root = document.createElement('p');
       //   const location = document.createElement('div');
