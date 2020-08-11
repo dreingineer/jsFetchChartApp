@@ -5,9 +5,10 @@ require('dotenv').config();
 
 const cors = require('cors');
 const app = express();
+const port = process.env.PORT || 3001;
 
-app.listen(3001, () => {
-  console.log('listening at port 3001')
+app.listen(port, () => {
+  console.log(`listening at ${port}`);
 });
 
 app.use(express.static('public')); // serve static file inside public
