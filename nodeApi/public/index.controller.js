@@ -14,16 +14,16 @@ if('geolocation' in navigator) {
       console.log(responseJson);
   
       const weather = responseJson.weather[0];
-      const air_quality = responseJson.air_quality;
+      const air_quality = responseJson.air_quality.results[0].measurements[0];
       temperature = weather.temp.value;
       sunrise = weather.sunrise.value;
       sunset = weather.sunset.value;
       summary = weather.weather_code.value;
       windspeed = weather.wind_speed.value;
-      particulateMatter = air_quality.results[0].measurements[0].parameter;
-      value = air_quality.results[0].measurements[0].value;
-      unit = air_quality.results[0].measurements[0].unit;
-      lastRead = air_quality.results[0].measurements[0].lastUpdated;
+      particulateMatter = air_quality.parameter;
+      value = air_quality.value;
+      unit = air_quality.unit;
+      lastRead = air_quality.lastUpdated;
   
       document.getElementById('latitude').textContent = lat.toFixed(2);
       document.getElementById('longitude').textContent = long.toFixed(2);
@@ -36,6 +36,11 @@ if('geolocation' in navigator) {
       document.getElementById('value').textContent = value;
       document.getElementById('unit').textContent = unit;
       document.getElementById('lastRead').textContent = lastRead;
+
+
+      const pageData = {lat, long, temperature, summary, windspeed, particulateMatter, value, unit, lastRead, sunrise, sunset};
+      await postData(pageData)
+
     } catch(error) {
       console.error(error);
       console.log('something went wrong');
@@ -55,11 +60,11 @@ if('geolocation' in navigator) {
   console.log('geolocation not available');
 }
 
-const button = document.getElementById('checkin');
-button.addEventListener('click', async event => {
-  const pageData = {lat, long, temperature, sunrise, sunset, windspeed};
-  await postData(pageData);
-});
+// const button = document.getElementById('checkin');
+// button.addEventListener('click', async event => {
+//   const pageData = {lat, long, temperature, sunrise, sunset, windspeed};
+//   await postData(pageData);
+// });
 
 async function postData(data) {
   const options = {
@@ -70,5 +75,5 @@ async function postData(data) {
 
   const res = await fetch('/api/checkin', options);
   const jsonData = await res.json();
-  console.log('response from server: ', jsonData);
+  console.log('response from database and server: ', jsonData);
 }
